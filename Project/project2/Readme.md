@@ -313,12 +313,6 @@ GCP Basics
 ETL / ELT
 Delta Lake
 
-### One important thing
-
-Since your current dataset has **`total_amount` and `calculated_amount` identical**, don't claim that the project detects incorrect amounts. The README above says they **can be compared for a basic data-quality check**, which is accurate.
-
-For your GitHub, the strongest structure is:
-
 
 ecommerce-data-engineering-pipeline/
 │
