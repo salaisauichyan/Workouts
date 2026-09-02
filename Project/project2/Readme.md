@@ -1,3 +1,7 @@
+```
+```
+
+````
 # E-Commerce Data Engineering Pipeline
 
 ## 📌 Project Overview
@@ -49,78 +53,117 @@ E-Commerce CSV
  Gold Delta Table
       ↓
  SQL Analytics
-🛠️ Technologies Used
-Python
-PySpark
-Databricks
-Apache Spark
-Delta Lake
-SQL
-Pandas
-NumPy
-ETL
-📊 Dataset
+````
+
+---
+
+## 🛠️ Technologies Used
+
+-  Python 
+-  PySpark 
+-  Databricks 
+-  Apache Spark 
+-  Delta Lake 
+-  SQL 
+-  Pandas 
+-  NumPy 
+-  ETL 
+
+---
+
+## 📊 Dataset
 
 The project uses an e-commerce sales dataset containing 5,000 records.
 
-Dataset Columns
-Column	Description
-order_id	Unique order identifier
-order_date	Date of the order
-customer_id	Customer identifier
-product	Product purchased
-category	Product category
-quantity	Number of items purchased
-unit_price	Price per item
-city	Customer city
-payment_method	Payment method used
-total_amount	Transaction amount from source data
-🔄 ETL Process
-1. Extract
+### Dataset Columns
+
+| ColumnDescription |                                     |
+| ----------------- | ----------------------------------- |
+| order\_id         | Unique order identifier             |
+| order\_date       | Date of the order                   |
+| customer\_id      | Customer identifier                 |
+| product           | Product purchased                   |
+| category          | Product category                    |
+| quantity          | Number of items purchased           |
+| unit\_price       | Price per item                      |
+| city              | Customer city                       |
+| payment\_method   | Payment method used                 |
+| total\_amount     | Transaction amount from source data |
+
+---
+
+## 🔄 ETL Process
+
+### 1. Extract
 
 The raw CSV file is uploaded to Databricks.
 
 File path:
 
+```
+```
+
+```
 /FileStore/tables/ecommerce_sales.csv
+```
 
 The CSV data is read using PySpark.
 
+```
+```
+
+```
 df_raw = spark.read \
     .option("header", "true") \
     .option("inferSchema", "true") \
     .option("delimiter", ",") \
     .csv("/FileStore/tables/ecommerce_sales.csv")
-2. Validate
+```
+
+---
+
+### 2. Validate
 
 The raw data is checked for:
 
-Total number of records
-Column names
-Data types
-Null values
-Duplicate orders
-Unique order IDs
+-  Total number of records 
+-  Column names 
+-  Data types 
+-  Null values 
+-  Duplicate orders 
+-  Unique order IDs 
 
 Example:
 
+```
+```
+
+```
 print("Total rows:", df_raw.count())
 print(df_raw.columns)
 df_raw.printSchema()
-3. Transform
+```
+
+---
+
+### 3. Transform
 
 The data is cleaned using PySpark.
 
 Transformation steps include:
 
-Removing duplicate orders
-Removing records with missing important fields
-Trimming unwanted spaces
-Standardizing text columns
-Calculating transaction amounts
+-  Removing duplicate orders 
+-  Removing records with missing important fields 
+-  Trimming unwanted spaces 
+-  Standardizing text columns 
+-  Calculating transaction amounts 
 
 Example:
 
+```
+```
+
+```
 from pyspark.sql.functions import col, trim
 
 df_clean = (
@@ -132,14 +175,27 @@ df_clean = (
     .withColumn("city", trim(col("city")))
     .withColumn("payment_method", trim(col("payment_method")))
 )
-💰 Sales Calculation
+```
+
+---
+
+## 💰 Sales Calculation
 
 The pipeline calculates the transaction amount using:
 
+```
+```
+
+```
 quantity × unit_price
+```
 
 Example:
 
+```
+```
+
+```
 from pyspark.sql.functions import round
 
 df_clean = df_clean.withColumn(
@@ -149,23 +205,35 @@ df_clean = df_clean.withColumn(
         2
     )
 )
+```
 
 The calculated value can be compared with the source
-total_amount to perform a basic data quality check.
 
-🥈 Silver Layer
+`total_amount` to perform a basic data quality check.
+
+---
+
+## 🥈 Silver Layer
 
 The cleaned and transformed data is stored as a Delta table.
 
+```
+```
+
+```
 df_clean.write \
     .format("delta") \
     .mode("overwrite") \
     .saveAsTable("ecommerce_sales_silver")
+```
 
 The Silver table contains cleaned, validated, and transformed
+
 transaction-level data.
 
-🥇 Gold Layer
+---
+
+## 🥇 Gold Layer
 
 The Gold layer contains aggregated data for analytics.
 
@@ -173,6 +241,10 @@ The data is grouped by product and category.
 
 Example:
 
+```
+```
+
+```
 from pyspark.sql.functions import count, sum, avg
 
 df_gold = (
@@ -186,18 +258,32 @@ df_gold = (
     )
     .orderBy(col("total_sales").desc())
 )
+```
 
 The Gold data is stored as a Delta table:
 
+```
+```
+
+```
 df_gold.write \
     .format("delta") \
     .mode("overwrite") \
     .saveAsTable("ecommerce_sales_gold")
-🔎 SQL Analytics
+```
+
+---
+
+## 🔎 SQL Analytics
 
 The Gold table can be queried using SQL.
 
-Top Products by Sales
+### Top Products by Sales
+
+```
+```
+
+```
 SELECT
     product,
     category,
@@ -207,7 +293,14 @@ SELECT
     average_order_value
 FROM ecommerce_sales_gold
 ORDER BY total_sales DESC;
-Sales by City
+```
+
+### Sales by City
+
+```
+```
+
+```
 SELECT
     city,
     COUNT(order_id) AS total_orders,
@@ -215,7 +308,14 @@ SELECT
 FROM ecommerce_sales_silver
 GROUP BY city
 ORDER BY total_sales DESC;
-Sales by Payment Method
+```
+
+### Sales by Payment Method
+
+```
+```
+
+```
 SELECT
     payment_method,
     COUNT(order_id) AS total_orders,
@@ -223,7 +323,14 @@ SELECT
 FROM ecommerce_sales_silver
 GROUP BY payment_method
 ORDER BY total_sales DESC;
-Sales by Category
+```
+
+### Sales by Category
+
+```
+```
+
+```
 SELECT
     category,
     COUNT(order_id) AS total_orders,
@@ -232,7 +339,16 @@ SELECT
 FROM ecommerce_sales_silver
 GROUP BY category
 ORDER BY total_sales DESC;
-📁 Project Structure
+```
+
+---
+
+## 📁 Project Structure
+
+```
+```
+
+```
 ecommerce-data-engineering-pipeline/
 │
 ├── data/
@@ -247,80 +363,86 @@ ecommerce-data-engineering-pipeline/
 ├── generate_data.py
 │
 └── README.md
-📈 Data Engineering Concepts Demonstrated
+```
+
+---
+
+## 📈 Data Engineering Concepts Demonstrated
 
 This project demonstrates the following concepts:
 
-ETL pipeline development
-Data ingestion
-Data validation
-Data cleaning
-Duplicate handling
-Null value handling
-PySpark DataFrame transformations
-Aggregations
-Delta Lake
-Bronze / Silver / Gold architecture
-SQL analytics
-Databricks
-Analytics-ready data preparation
-🚀 Future Improvements
+-  ETL pipeline development 
+-  Data ingestion 
+-  Data validation 
+-  Data cleaning 
+-  Duplicate handling 
+-  Null value handling 
+-  PySpark DataFrame transformations 
+-  Aggregations 
+-  Delta Lake 
+-  Bronze / Silver / Gold architecture 
+-  SQL analytics 
+-  Databricks 
+-  Analytics-ready data preparation 
+
+---
+
+## 🚀 Future Improvements
 
 Possible improvements for this project include:
 
-Add Azure Data Lake Storage
-Add Azure Data Factory
-Add Databricks Workflows
-Add incremental data loading
-Add partitioning
-Add data quality rules
-Add Slowly Changing Dimensions (SCD)
-Add real-time streaming using Kafka
-Add automated pipeline monitoring
-🎓 What I Learned
+-  Add Azure Data Lake Storage 
+-  Add Azure Data Factory 
+-  Add Databricks Workflows 
+-  Add incremental data loading 
+-  Add partitioning 
+-  Add data quality rules 
+-  Add Slowly Changing Dimensions (SCD) 
+-  Add real-time streaming using Kafka 
+-  Add automated pipeline monitoring 
+
+---
+
+## 🎓 What I Learned
 
 Through this project, I learned how to:
 
-Build an ETL pipeline using PySpark
-Work with data in Databricks
-Clean and validate raw datasets
-Transform data using Spark DataFrames
-Store data using Delta Lake
-Create Silver and Gold data layers
-Use SQL for analytical queries
-Structure a data engineering project for GitHub
-📌 Project Status
+-  Build an ETL pipeline using PySpark 
+-  Work with data in Databricks 
+-  Clean and validate raw datasets 
+-  Transform data using Spark DataFrames 
+-  Store data using Delta Lake 
+-  Create Silver and Gold data layers 
+-  Use SQL for analytical queries 
+-  Structure a data engineering project for GitHub 
 
-Completed – Learning Project
+---
+
+## 📌 Project Status
+
+**Completed – Learning Project**
 
 This project was created to demonstrate practical
+
 Data Engineering skills as a fresher.
 
-👨‍💻 Author
+---
 
-Salai Sauichyan
+## 👨‍💻 Author
+
+**Salai Sauichyan**
 
 Aspiring Data Engineer
 
 Skills:
 
-Python
-SQL
-PySpark
-Databricks
-Azure Basics
-GCP Basics
-ETL / ELT
-Delta Lake
+-  Python 
+-  SQL 
+-  PySpark 
+-  Databricks 
+-  Azure Basics 
+-  GCP Basics 
+-  ETL / ELT 
+-  Delta Lake
 
-
-ecommerce-data-engineering-pipeline/
-│
-├── data/
-│   └── ecommerce_sales.csv
-├── notebooks/
-│   └── ecommerce_etl.py
-├── sql/
-│   └── analytics.sql
-├── generate_data.py
-└── README.md
+(i do all content copy and past into the readme.md? )
