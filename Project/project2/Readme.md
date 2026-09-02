@@ -319,7 +319,7 @@ Since your current dataset has **`total_amount` and `calculated_amount` identica
 
 For your GitHub, the strongest structure is:
 
-```text
+
 ecommerce-data-engineering-pipeline/
 │
 ├── data/
