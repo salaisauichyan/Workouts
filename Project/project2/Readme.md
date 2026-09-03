@@ -89,9 +89,9 @@ The project uses an e-commerce sales dataset containing **5,000 records**.
 
 ### 1. Extract
 
-The raw CSV file is uploaded to Databricks.
+The raw CSV file is uploaded
 
-**File path:**
+
 
 ```text
 /FileStore/tables/ecommerce_sales.csv
