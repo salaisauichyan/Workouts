@@ -296,20 +296,24 @@ ORDER BY total_sales DESC;
 ## 📁 Project Structure
 
 ```text
-ecommerce-data-engineering-pipeline/
-│
-├── data/
-│   └── ecommerce_sales.csv
-│
-├── notebooks/
-│   └── ecommerce_etl.py
-│
-├── sql/
-│   └── analytics.sql
-│
-├── generate_data.py
-│
-└── README.md
+
+data_generation.py
+        ↓
+ecommerce_sales.csv
+        ↓
+Databricks
+        ↓
+PySpark
+        ↓
+Clean & Transform
+        ↓
+Delta Lake
+        ↓
+Silver / Gold Tables
+        ↓
+SQL Analytics
+
+
 ```
 
 ---
